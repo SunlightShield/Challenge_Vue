@@ -22,13 +22,13 @@ const CapturarDatos = () => {
   console.log('Pago Inicial:', initialPayment.value)
   console.log('Interest:', Interest.value)
 
+  //enviar datos al metodo para calcular el dividendo
   const dividendoHipotecario = calcularDividendoHipotecario(
     time.value,
     totalValue.value,
     initialPayment.value,
     Interest.value
   )
-  console.log('Dividendo Hipotecario:', dividendoHipotecario)
 }
 
 const calcularDividendoHipotecario = (time, totalValue, initialPayment, Interest) => {
