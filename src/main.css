@@ -1,0 +1,19 @@
+body {
+  background-color: black;
+}
+
+#imagen {
+  z-index: -1;
+}
+
+#containerPrincipal {
+  opacity: 0.85;
+}
+
+#tituloFormulario {
+  color: #42b883;
+}
+
+#btn-calcular {
+  background-color: #42b883;
+}
