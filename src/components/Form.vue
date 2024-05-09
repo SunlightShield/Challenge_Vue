@@ -17,14 +17,14 @@ const initialPayment = ref(0) //pie capturado del formulario
 const Interest = ref('5') //interes capturado del formulario}
 const paymentPerMonth = ref(0)
 
-const CapturarDatos = () => {
+const CapturateData = () => {
   console.log('Time:', time.value)
   console.log('Valor Total:', totalValue.value)
   console.log('Pago Inicial:', initialPayment.value)
   console.log('Interest:', Interest.value)
 
-  //enviar datos al metodo para calcular el dividendo
-  const dividendoHipotecario = calcularDividendoHipotecario(
+  //enviar datos al metodo para calcular el pago mensual
+  const calculate = calculatePayment(
     time.value,
     totalValue.value,
     initialPayment.value,
@@ -32,26 +32,49 @@ const CapturarDatos = () => {
   )
 }
 
-const calcularDividendoHipotecario = (time, totalValue, initialPayment, Interest) => {
+const calculatePayment = (time, totalValue, initialPayment, interest) => {
+  // forzar los datos a ser INT
   const timeParsed = parseInt(time)
   const totalValueParsed = parseInt(totalValue)
   const initialPaymentParsed = parseInt(initialPayment)
-  const interestParsed = parseInt(Interest)
+  const interestParsed = parseInt(interest)
 
+  // Validar que los datos no sean ceros
   if (timeParsed === 0 || totalValueParsed === 0 || initialPaymentParsed === 0) {
-    console.error('Los datos no pueden ser ceros')
+    console.error('los datos no pueden ser ceros')
   }
-
   const loan = totalValueParsed - initialPaymentParsed
-  const finalInterest = interestParsed / 100 / 12
-  paymentPerMonth.value = loan * (finalInterest / (1 - Math.pow(1 + finalInterest, -timeParsed)))
+  const monthlyInterest = interestParsed / 100 / 12
+  const paymentPerMonth =
+    loan * (monthlyInterest / (1 - Math.pow(1 + monthlyInterest, -timeParsed)))
 
-  emitirDatos(paymentPerMonth.value)
+  emitirDatos(
+    paymentPerMonth,
+    timeParsed,
+    totalValueParsed,
+    initialPaymentParsed,
+    interestParsed,
+    loan
+  )
 }
 
-const emitirDatos = (paymentPerMonth) => {
+const emitirDatos = (
+  paymentPerMonth,
+  timeParsed,
+  totalValueParsed,
+  initialPaymentParsed,
+  interestParsed,
+  loan
+) => {
   console.log('Datos enviados desde el componente hijo:', paymentPerMonth)
-  emits('datos-enviados', { payment: parseInt(paymentPerMonth) })
+  emits('datos-enviados', {
+    payment: parseInt(paymentPerMonth),
+    time: timeParsed,
+    totalValue: totalValueParsed,
+    initialPayment: initialPaymentParsed,
+    interest: interestParsed,
+    loan: loan
+  })
 }
 </script>
 <template>
@@ -86,7 +109,7 @@ const emitirDatos = (paymentPerMonth) => {
         <input type="Number" class="form-control" id="plazo" v-model="time" placeholder="2" />
       </div>
 
-      <button type="submit" class="btn" id="btn-calcular" @click="(e) => CapturarDatos(e)">
+      <button type="submit" class="btn" id="btn-calcular" @click="(e) => CapturateData(e)">
         {{ textoBoton }}
       </button>
     </div>

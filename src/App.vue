@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import Form from './components/Form.vue'
 import Result from './components/Result.vue'
-// import Card from './components/Card.vue'
+import Card from './components/Card.vue'
 import './main.css'
 const datosRecibidos = ref(null)
 
@@ -41,11 +41,11 @@ const recibirDatos = (payment) => {
         </div>
       </div>
     </transition>
-    <!-- <div class="row">
+    <div class="row">
       <div class="card">
         <Card />
       </div>
-    </div> -->
+    </div>
     <div class="align-item bottom d-flex flex-row-reverse" id="imagen">
       <img src="./assets/img/fondo.png" />
     </div>
