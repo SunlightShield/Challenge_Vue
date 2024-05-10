@@ -101,7 +101,7 @@ export default {
                 }}
               </p>
               <p>
-                *si el sueldo no aparece, por favor espere a que la api que obtiene el valor de la
+                *Si el sueldo no aparece, por favor espere a que la api que obtiene el valor de la
                 uf termine de cargarse
               </p>
             </div>
@@ -123,7 +123,7 @@ export default {
                   })
                 }}
               </p>
-              <p>*valor de la UF obtenido de la api "https://mindicador.cl/api/uf"</p>
+              <p>*Valor de la UF obtenido de la api "https://mindicador.cl/api/uf"</p>
             </div>
           </div>
         </div>

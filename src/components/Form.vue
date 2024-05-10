@@ -27,7 +27,7 @@ const showToastEmpty = (message) => {
 }
 
 //funcion para capturar la data en una primera instancia
-const CapturateData = () => {
+const CatchData = () => {
   console.log('Time:', time.value)
   console.log('Valor Total:', totalValue.value)
   console.log('Pago Inicial:', initialPayment.value)
@@ -60,7 +60,7 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
     const paymentPerMonth = (loan * monthlyInterest) / (1 - denominator)
 
     // se triggea la funcion para pasar los datos al componente padre
-    emitirDatos(
+    emitData(
       paymentPerMonth,
       timeParsed,
       totalValueParsed,
@@ -72,7 +72,7 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
 }
 
 //se emiten los datos
-const emitirDatos = (
+const emitData = (
   paymentPerMonth,
   timeParsed,
   totalValueParsed,
@@ -123,7 +123,7 @@ const emitirDatos = (
         <input type="Number" class="form-control" id="plazo" v-model="time" placeholder="2" />
       </div>
 
-      <button type="submit" class="btn" id="btn-calcular" @click="(e) => CapturateData(e)">
+      <button type="submit" class="btn" id="btn-calcular" @click="(e) => CatchData(e)">
         {{ textoBoton }}
       </button>
     </div>

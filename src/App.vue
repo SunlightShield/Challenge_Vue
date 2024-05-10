@@ -7,12 +7,12 @@ import Form from './components/Form.vue'
 import Result from './components/Result.vue'
 import Card from './components/Card.vue'
 import './main.css'
-const dataFromSon = ref(null) //data que se obtiene del componente Form
+const dataFromChild = ref(null) //data que se obtiene del componente Form
 const showForm = ref(true) //variable que permite que se vea el modal
 
 const getData = (payment) => {
   console.log('Datos recibidos en el componente padre:', payment)
-  dataFromSon.value = payment
+  dataFromChild.value = payment
   // Ocultar el formulario cuando se reciben datos
   showForm.value = false
 }
@@ -33,12 +33,12 @@ const getData = (payment) => {
     <!-- resultado -->
 
     <transition name="fade">
-      <div v-if="dataFromSon !== null" class="container mt-5" id="containerPrincipal">
+      <div v-if="dataFromChild !== null" class="container mt-5" id="containerPrincipal">
         <div class="row">
           <div class="card-header">
             <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Resultados</h4>
             <div class="card fadeIn">
-              <Result :datos="dataFromSon" />
+              <Result :datos="dataFromChild" />
             </div>
           </div>
         </div>
@@ -48,7 +48,7 @@ const getData = (payment) => {
     <!-- card api -->
 
     <transition name="fade">
-      <div v-if="dataFromSon !== null" class="container mt-5">
+      <div v-if="dataFromChild !== null" class="container mt-5">
         <div class="row">
           <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Información</h4>
           <div class="card fadeIn">
