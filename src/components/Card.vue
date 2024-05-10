@@ -2,13 +2,13 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
-// Variable bancos
-const banks = ref({})
-// Variable para darle el producto al modal
-const creditSelected = ref(null)
-// Variable que comprueba si el modal esta abierto o no
-const ModalOpen = ref(false)
+const banks = ref({}) // Variable bancos
+const creditSelected = ref(null) // Variable para darle el producto al modal
+const ModalOpen = ref(false) // Variable que comprueba si el modal esta abierto o no
 
+//ejecuto la api proporcionada, algunos de los arrays del json eran diferentes en estructura,
+//ocupo un ternario para juzgar si el array es o no igual a los demas usando la variable bankData
+//si no lo es, se crea un array para que tengan la misma estructura
 axios
   .get('https://api.hipotecarios.info/creditos/?valorPropiedad=2000&Pie=30&Tiempo=20&Dfl2=true')
   .then((response) => {
@@ -40,13 +40,15 @@ const closeModal = () => {
     </div>
     <!-- Iteración de bancos y productos -->
     <div class="row justify-content-center mt-2">
+      <!-- primera iteracion para obtener los nombres de los bancos -->
       <div class="col-md-6" v-for="(bankProducts, bankName) in banks" :key="bankName">
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
             <h4 class="my-0 font-weight-normal text-center">{{ bankName }}</h4>
           </div>
           <div class="card-body">
-            <div class="d-flex justify-content-center wrap">
+            <div class="card-body d-flex justify-content-center flex-wrap">
+              <!-- segunda iteracion para imprimir un boton segun cada credito que aparezca en el array -->
               <div v-for="(product, index) in bankProducts" :key="index">
                 <button
                   type="button"

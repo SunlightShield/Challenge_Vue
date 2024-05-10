@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 
+//props para hacer el objeto obligatorio
 export default {
   props: {
     datos: {
@@ -10,6 +11,7 @@ export default {
     }
   },
   setup() {
+    //setup se ejecuta una vez que componente aparece en el dom
     const uf = ref(null)
     axios
       .get('https://mindicador.cl/api/uf')
@@ -36,6 +38,7 @@ export default {
         <div class="p-4">
           <div class="card p-4">
             <div id="textoResultado">
+              <!-- toLocaleString para formatear todos los numeros -->
               <p>
                 Años:
                 {{
@@ -96,6 +99,10 @@ export default {
                     maximumFractionDigits: 3
                   })
                 }}
+              </p>
+              <p>
+                *si el sueldo no aparece, por favor espere a que la api que obtiene el valor de la
+                uf termine de cargarse
               </p>
             </div>
           </div>

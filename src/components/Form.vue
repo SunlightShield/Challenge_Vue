@@ -2,23 +2,21 @@
 import { ref, defineEmits } from 'vue'
 import toastify from 'toastify-js'
 import 'toastify-js/src/toastify.css'
+//props, en este caso para darle un texto al boton
 const props = defineProps({
-  formFields: {
-    type: Array,
-    required: true
-  },
   textoBoton: {
     type: String,
     default: 'Calcular!'
   }
 })
-const emits = defineEmits(['datos-enviados'])
+const emits = defineEmits(['datos-enviados']) //para enviar datos al componente padre
 const time = ref(0) //plazo capturado del formulario
 const totalValue = ref(0) //valor de la propiedad capturado del formulario
 const initialPayment = ref(0) //pie capturado del formulario
 const Interest = ref('5') //interes capturado del formulario}
-const paymentPerMonth = ref(0)
+const paymentPerMonth = ref(0) //para calcular el pago por mes
 
+//funcion para mostrar el toast
 const showToastEmpty = (message) => {
   toastify({
     text: message,
@@ -28,12 +26,13 @@ const showToastEmpty = (message) => {
   }).showToast()
 }
 
+//funcion para capturar la data en una primera instancia
 const CapturateData = () => {
   console.log('Time:', time.value)
   console.log('Valor Total:', totalValue.value)
   console.log('Pago Inicial:', initialPayment.value)
   console.log('Interest:', Interest.value)
-  //enviar datos al metodo para calcular el pago mensual
+  //enviar datos al metodo para calcular el pago mensual, divido el metodo en 2 para hacerlo mas manejable
   const calculate = calculatePayment(
     time.value,
     totalValue.value,
@@ -42,6 +41,7 @@ const CapturateData = () => {
   )
 }
 
+//calculo final del pago
 const calculatePayment = (time, totalValue, initialPayment, interest) => {
   // forzar los datos a ser INT
   const timeParsed = parseInt(time)
@@ -51,7 +51,7 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
 
   // Validar que los datos no sean ceros
   if (timeParsed === 0 || totalValueParsed === 0 || initialPaymentParsed === 0) {
-    showToastEmpty('Por favor llene los campos para simular')
+    showToastEmpty('Por favor llene los campos para simular') //en caso de ser 0, se muestra el toast y no se permite avanzar
   } else {
     const decimalInterest = interestParsed / 100
     const monthlyInterest = decimalInterest / 12
@@ -59,7 +59,7 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
     const denominator = Math.pow(1 + monthlyInterest, -timeParsed)
     const paymentPerMonth = (loan * monthlyInterest) / (1 - denominator)
 
-    // Emitir todos los datos
+    // se triggea la funcion para pasar los datos al componente padre
     emitirDatos(
       paymentPerMonth,
       timeParsed,
@@ -71,6 +71,7 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
   }
 }
 
+//se emiten los datos
 const emitirDatos = (
   paymentPerMonth,
   timeParsed,

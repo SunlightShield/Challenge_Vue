@@ -7,8 +7,8 @@ import Form from './components/Form.vue'
 import Result from './components/Result.vue'
 import Card from './components/Card.vue'
 import './main.css'
-const dataFromSon = ref(null)
-const showForm = ref(true)
+const dataFromSon = ref(null) //data que se obtiene del componente Form
+const showForm = ref(true) //variable que permite que se vea el modal
 
 const getData = (payment) => {
   console.log('Datos recibidos en el componente padre:', payment)
@@ -44,7 +44,9 @@ const getData = (payment) => {
         </div>
       </div>
     </transition>
+
     <!-- card api -->
+
     <transition name="fade">
       <div v-if="dataFromSon !== null" class="container mt-5">
         <div class="row">
@@ -56,31 +58,4 @@ const getData = (payment) => {
       </div>
     </transition>
   </div>
-  <!-- <div class="align-item bottom d-flex flex-row-reverse" id="imagen">
-    <img src="./assets/img/fondo.png" />
-  </div> -->
 </template>
-
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 1s; /* Duración de la transición */
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.fadeIn {
-  animation: fadeIn 1s;
-}
-</style>

@@ -28,3 +28,25 @@ body {
 #textoResultado {
   font-weight: 600;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s; /* Duración de la transición */
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fadeIn {
+  animation: fadeIn 1s;
+}
