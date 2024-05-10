@@ -1,5 +1,7 @@
 <script setup>
 import { ref, defineEmits } from 'vue'
+import toastify from 'toastify-js'
+import 'toastify-js/src/toastify.css'
 const props = defineProps({
   formFields: {
     type: Array,
@@ -17,12 +19,20 @@ const initialPayment = ref(0) //pie capturado del formulario
 const Interest = ref('5') //interes capturado del formulario}
 const paymentPerMonth = ref(0)
 
+const showToastEmpty = (message) => {
+  toastify({
+    text: message,
+    duration: 5000,
+    close: true,
+    backgroundColor: '#ff6347'
+  }).showToast()
+}
+
 const CapturateData = () => {
   console.log('Time:', time.value)
   console.log('Valor Total:', totalValue.value)
   console.log('Pago Inicial:', initialPayment.value)
   console.log('Interest:', Interest.value)
-
   //enviar datos al metodo para calcular el pago mensual
   const calculate = calculatePayment(
     time.value,
@@ -41,21 +51,24 @@ const calculatePayment = (time, totalValue, initialPayment, interest) => {
 
   // Validar que los datos no sean ceros
   if (timeParsed === 0 || totalValueParsed === 0 || initialPaymentParsed === 0) {
-    console.error('los datos no pueden ser ceros')
-  }
-  const loan = totalValueParsed - initialPaymentParsed
-  const monthlyInterest = interestParsed / 100 / 12
-  const paymentPerMonth =
-    loan * (monthlyInterest / (1 - Math.pow(1 + monthlyInterest, -timeParsed)))
+    showToastEmpty('Por favor llene los campos para simular')
+  } else {
+    const decimalInterest = interestParsed / 100
+    const monthlyInterest = decimalInterest / 12
+    const loan = (totalValueParsed - initialPaymentParsed) * (1 + decimalInterest)
+    const denominator = Math.pow(1 + monthlyInterest, -timeParsed)
+    const paymentPerMonth = (loan * monthlyInterest) / (1 - denominator)
 
-  emitirDatos(
-    paymentPerMonth,
-    timeParsed,
-    totalValueParsed,
-    initialPaymentParsed,
-    interestParsed,
-    loan
-  )
+    // Emitir todos los datos
+    emitirDatos(
+      paymentPerMonth,
+      timeParsed,
+      totalValueParsed,
+      initialPaymentParsed,
+      interestParsed,
+      loan
+    )
+  }
 }
 
 const emitirDatos = (

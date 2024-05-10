@@ -16,4 +16,15 @@ body {
 
 #btn-calcular {
   background-color: #42b883;
+  color: black;
+}
+#modal {
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#textoResultado {
+  font-weight: 600;
 }

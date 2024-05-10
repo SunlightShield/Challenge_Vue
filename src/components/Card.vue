@@ -5,7 +5,7 @@ import axios from 'axios'
 // Variable bancos
 const banks = ref({})
 // Variable para darle el producto al modal
-const selectedProduct = ref(null)
+const creditSelected = ref(null)
 // Variable que comprueba si el modal esta abierto o no
 const ModalOpen = ref(false)
 
@@ -22,31 +22,42 @@ axios
 
 //mostrar el modal
 const showModal = (product) => {
-  selectedProduct.value = product
+  creditSelected.value = product
   ModalOpen.value = true
 }
 
 // cerrar el modal
 const closeModal = () => {
-  selectedProduct.value = null
+  creditSelected.value = null
   ModalOpen.value = false
 }
 </script>
 
 <template>
-  <div class="container">
+  <div class="container p-5">
+    <div class="card-header">
+      <h4 class="my-0 font-weight-normal text-center mb-2">Informacion de creditos hipotecarios</h4>
+    </div>
     <!-- Iteración de bancos y productos -->
-    <div class="col-md-4" v-for="(bankProducts, bankName) in banks" :key="bankName">
-      <div class="card mb-4 shadow-sm">
-        <!-- Línea roja -->
-        <div class="card-header">
-          <h4 class="my-0 font-weight-normal">{{ bankName }}</h4>
-        </div>
-        <div class="card-body">
-          <div v-for="(product, index) in bankProducts" :key="index">
-            <button type="button" class="btn btn-primary" @click="showModal(product)">
-              Ver Detalles
-            </button>
+    <div class="row justify-content-center mt-2">
+      <div class="col-md-6" v-for="(bankProducts, bankName) in banks" :key="bankName">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal text-center">{{ bankName }}</h4>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-center wrap">
+              <div v-for="(product, index) in bankProducts" :key="index">
+                <button
+                  type="button"
+                  class="btn btn-primary p-2 m-2"
+                  id="btn-calcular"
+                  @click="showModal(product)"
+                >
+                  Ver Detalles
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -54,7 +65,7 @@ const closeModal = () => {
 
     <!-- Modal -->
     <div class="modal" tabindex="-1" role="dialog" :class="{ show: ModalOpen }">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog" role="document" id="modal">
         <div class="modal-content">
           <div class="modal-header">
             <h3>Detalles del crédito</h3>
@@ -62,42 +73,44 @@ const closeModal = () => {
           <div class="modal-body">
             <!-- Mostrar cada dato del producto -->
             <p class="card-text">
-              Características: {{ selectedProduct ? selectedProduct.caracteristicas : '' }}
+              Características: {{ creditSelected ? creditSelected.caracteristicas : '' }}
             </p>
             <p class="card-text">
-              Costo Total: {{ selectedProduct ? selectedProduct.costoTotal : '' }}
+              Costo Total: {{ creditSelected ? creditSelected.costoTotal : '' }}
             </p>
             <p class="card-text">
-              Financiamiento: {{ selectedProduct ? selectedProduct.financiamiento : '' }}
+              Financiamiento: {{ creditSelected ? creditSelected.financiamiento : '' }}
             </p>
             <p class="card-text">
-              Gastos Operacionales: {{ selectedProduct ? selectedProduct.gastosOperacionales : '' }}
+              Gastos Operacionales: {{ creditSelected ? creditSelected.gastosOperacionales : '' }}
             </p>
             <p class="card-text">
               Gastos Operacionales Detalle:
-              {{ selectedProduct ? selectedProduct.gastosOperacionalesText : '' }}
+              {{ creditSelected ? creditSelected.gastosOperacionalesText : '' }}
             </p>
             <p class="card-text">
-              Plazo Máximo: {{ selectedProduct ? selectedProduct.maximoPlazo : '' }}
+              Plazo Máximo: {{ creditSelected ? creditSelected.maximoPlazo : '' }}
             </p>
             <p class="card-text">
-              Observaciones: {{ selectedProduct ? selectedProduct.observaciones : '' }}
+              Observaciones: {{ creditSelected ? creditSelected.observaciones : '' }}
             </p>
             <p class="card-text">
-              Periodo De Gracia: {{ selectedProduct ? selectedProduct.periodoDeGracia : '' }}
+              Periodo De Gracia: {{ creditSelected ? creditSelected.periodoDeGracia : '' }}
             </p>
             <p class="card-text">
-              Requisitos: {{ selectedProduct ? selectedProduct.requisitos : '' }}
+              Requisitos: {{ creditSelected ? creditSelected.requisitos : '' }}
             </p>
             <p class="card-text">
-              Seguros Incluidos: {{ selectedProduct ? selectedProduct.segurosIncluidos : '' }}
+              Seguros Incluidos: {{ creditSelected ? creditSelected.segurosIncluidos : '' }}
             </p>
             <p class="card-text">
-              Tasa De Interés: {{ selectedProduct ? selectedProduct.tasaDeInteres : '' }}
+              Tasa De Interés: {{ creditSelected ? creditSelected.tasaDeInteres : '' }}
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Cerrar</button>
+            <button type="button" class="btn btn-secondary" id="btn-calcular" @click="closeModal">
+              Cerrar
+            </button>
           </div>
         </div>
       </div>

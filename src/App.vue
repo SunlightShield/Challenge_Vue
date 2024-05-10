@@ -7,21 +7,25 @@ import Form from './components/Form.vue'
 import Result from './components/Result.vue'
 import Card from './components/Card.vue'
 import './main.css'
-const datosRecibidos = ref(null)
+const dataFromSon = ref(null)
+const showForm = ref(true)
 
-const recibirDatos = (payment) => {
+const getData = (payment) => {
   console.log('Datos recibidos en el componente padre:', payment)
-  datosRecibidos.value = payment
+  dataFromSon.value = payment
+  // Ocultar el formulario cuando se reciben datos
+  showForm.value = false
 }
 </script>
 
 <template>
   <div class="container mt-5" id="containerPrincipal">
     <div class="row">
-      <div class="card-header">
+      <!-- Mostrar el formulario solo si showForm es verdadero -->
+      <div v-if="showForm" class="card-header">
         <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Simula tu crédito</h4>
         <div class="card">
-          <Form @datos-enviados="recibirDatos" />
+          <Form @datos-enviados="getData" />
         </div>
       </div>
     </div>
@@ -29,27 +33,32 @@ const recibirDatos = (payment) => {
     <!-- resultado -->
 
     <transition name="fade">
-      <div v-if="datosRecibidos !== null" class="container mt-5" id="containerPrincipal">
+      <div v-if="dataFromSon !== null" class="container mt-5" id="containerPrincipal">
         <div class="row">
           <div class="card-header">
-            <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Resultado</h4>
-            <!-- Agregar la clase para la animación fadeIn -->
+            <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Resultados</h4>
             <div class="card fadeIn">
-              <Result :datos="datosRecibidos" />
+              <Result :datos="dataFromSon" />
             </div>
           </div>
         </div>
       </div>
     </transition>
-    <div class="row">
-      <div class="card">
-        <Card />
+    <!-- card api -->
+    <transition name="fade">
+      <div v-if="dataFromSon !== null" class="container mt-5">
+        <div class="row">
+          <h4 class="my-0 font-weight-normal mb-3" id="tituloFormulario">Información</h4>
+          <div class="card fadeIn">
+            <Card />
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="align-item bottom d-flex flex-row-reverse" id="imagen">
-      <img src="./assets/img/fondo.png" />
-    </div>
+    </transition>
   </div>
+  <!-- <div class="align-item bottom d-flex flex-row-reverse" id="imagen">
+    <img src="./assets/img/fondo.png" />
+  </div> -->
 </template>
 
 <style>

@@ -1,50 +1,126 @@
 <script>
+import axios from 'axios'
+import { ref } from 'vue'
+
 export default {
-  data() {
-    return {
-      tiempo: 1, // Ajusta estos valores según tus datos
-      totalValue: 10000,
-      initialPayment: 1000,
-      interest: 5,
-      pagoMensual: 0, // Se actualizará después del cálculo
-      totalPagado: 0 // Se actualizará después del cálculo
+  props: {
+    datos: {
+      type: Object,
+      required: true
     }
   },
-  mounted() {
-    // Calcula el pago mensual y el total pagado durante el plazo del préstamo
-    this.calcularPagos()
-  },
-  methods: {
-    calcularPagos() {
-      const monto = this.totalValue - this.initialPayment
-      const tasa = this.interest / 100 / 12
-      const tiempoMeses = this.tiempo * 12
+  setup() {
+    const uf = ref(null)
+    axios
+      .get('https://mindicador.cl/api/uf')
+      .then((response) => {
+        const firstPosition = response.data.serie[0]
+        uf.value = firstPosition.valor // obtengo el primer valor del js y se lo paso a la variable uf
+      })
+      .catch((error) => {
+        console.error('Hubo un error al obtener los datos:', error)
+      })
 
-      // Calcula el pago mensual utilizando la fórmula del préstamo hipotecario
-      const numerador = monto * tasa * Math.pow(1 + tasa, tiempoMeses)
-      const denominador = Math.pow(1 + tasa, tiempoMeses) - 1
-      this.pagoMensual = numerador / denominador
-
-      // Calcula el total de pagos durante el plazo del préstamo
-      this.totalPagado = this.pagoMensual * tiempoMeses
+    return {
+      uf // Retornamos uf para que esté disponible en la plantilla
     }
   }
 }
 </script>
 
 <template>
-  <div>
-    <h2>Resultados</h2>
-    <div>
-      <p>Años {{ tiempo }}</p>
-      <p>Valor Total de la Propiedad: {{ totalValue }} UF</p>
-      <p>Pie {{ initialPayment }} UF</p>
-      <p>Interés {{ interest }} %</p>
-      <p>Pago Mensual {{ pagoMensual.toFixed(2) }} UF</p>
-      <p>
-        Total del credito:
-        {{ totalPagado.toFixed(2) }} $
-      </p>
+  <div class="container">
+    <div class="row">
+      <!-- card resultado -->
+      <div class="col-md-6">
+        <div class="p-4">
+          <div class="card p-4">
+            <div id="textoResultado">
+              <p>
+                Años:
+                {{
+                  datos.time.toLocaleString({ minimumFractionDigits: 3, maximumFractionDigits: 3 })
+                }}
+              </p>
+              <p>
+                Valor Total de la Propiedad:
+                {{
+                  datos.totalValue.toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+                UF
+              </p>
+              <p>
+                Pie:
+                {{
+                  datos.initialPayment.toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+                UF
+              </p>
+              <p>
+                Interés:
+                {{
+                  datos.interest.toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+                %
+              </p>
+              <p>
+                Pago Mensual: $
+                {{
+                  ((datos.payment / 12) * uf).toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+              </p>
+              <p>
+                Total del crédito:
+                {{
+                  datos.loan.toLocaleString({ minimumFractionDigits: 3, maximumFractionDigits: 3 })
+                }}
+                en UF
+              </p>
+              <p>
+                Sueldo requerido: $
+                {{
+                  ((datos.payment * uf * 4) / 12).toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- card uf -->
+      <div class="col-md-6">
+        <div class="p-4">
+          <div class="card p-4" v-if="uf !== null">
+            <div id="textoResultado">
+              <p>
+                Valor UF:
+                {{
+                  uf.toLocaleString({
+                    minimumFractionDigits: 3,
+                    maximumFractionDigits: 3
+                  })
+                }}
+              </p>
+              <p>*valor de la UF obtenido de la api "https://mindicador.cl/api/uf"</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
